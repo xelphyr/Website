@@ -1,10 +1,20 @@
 // Matter.js aliases
-const { Engine, World, Bodies, Constraint, Mouse, MouseConstraint} = Matter;
+const { Engine, World, Bodies, Body, Constraint, Mouse, MouseConstraint} = Matter;
 
 let engine, runner, sign, world, btn, leftRope, rightRope, canvas, mConstraint;
+
+let alreadyLoaded = false;
+
 const BASE_W = 800, BASE_H = 600
 const aspectRatio = BASE_W/BASE_H;
 let scaleFactor = 1
+
+let pointLA = {x:0.4, y:0},
+    pointLB = {x:-0.9, y:0.9},
+    pointRA = {x:0.6, y:0},
+    pointRB = {x:0.9, y:0.9},
+    lengthL = 0.4,
+    lengthR = 0.4
 
 function setup() {
     const {canvasWidth, canvasHeight} = updateCanvasDimensions();
@@ -22,26 +32,47 @@ function setup() {
     engine = Engine.create();
     world = engine.world;
 
-    sign = new SignMain();
-    let leftRopeMaxLength = 200, rightRopeMaxLength = 200;
+    if (!alreadyLoaded) {
+        sign = new SignMain;
+        sign.resizeUpdate(canvasWidth, canvasHeight);
+        alreadyLoaded = true;
+    }
+    else {
+        sign.resizeUpdate(canvasWidth, canvasHeight);
+    }
+    let leftRopeMaxLength = normToPx(lengthL, canvasHeight),
+        rightRopeMaxLength = normToPx(lengthR, canvasHeight);
     leftRope = Constraint.create({
         bodyB: sign.body,
         length: leftRopeMaxLength,
         stiffness: 0.000001,
-        pointA: {x: 320, y: 80},
-        pointB: {x: -90, y: 5}
+        pointA: {
+            x: normToPx(pointLA.x, canvasWidth),
+            y: normToPx(pointLA.y, canvasHeight),
+        },
+        pointB: {
+            x: normToPx(pointLB.x, normToPx(sign.sizeBackup.x/2, canvasWidth)),
+            y: normToPx(pointLB.y, normToPx(sign.sizeBackup.y/2, canvasHeight)),
+        },
     } );
     leftRope.sqrLength = leftRopeMaxLength*leftRopeMaxLength;
     rightRope = Constraint.create({
         bodyB: sign.body,
         length: rightRopeMaxLength,
         stiffness: 0.000001,
-        pointA: {x: 480, y: 80},
-        pointB: {x: 90, y:-5}
+        pointA: {
+            x: normToPx(pointRA.x, canvasWidth),
+            y: normToPx(pointRA.y, canvasHeight),
+        },
+        pointB: {
+            x: normToPx(pointRB.x, normToPx(sign.sizeBackup.x/2, canvasWidth)),
+            y: normToPx(pointRB.y, normToPx(sign.sizeBackup.y/2, canvasHeight)),
+        },
     } );
     rightRope.sqrLength = rightRopeMaxLength*rightRopeMaxLength;
     World.add(world, leftRope);
     World.add(world, rightRope);
+
 
     let canvasmouse = Mouse.create(canvas.elt)
     canvasmouse.pixelRatio = pixelDensity();
@@ -56,7 +87,7 @@ function windowResized() {
 }
 
 function updateCanvasDimensions() {
-    if (windowWidth / windowHeight > aspectRatio) {
+    if (windowWidth / windowHeight < aspectRatio) {
         return {
             canvasWidth: windowHeight * aspectRatio,
             canvasHeight: windowHeight
@@ -67,7 +98,10 @@ function updateCanvasDimensions() {
         canvasWidth: windowWidth,
         canvasHeight: windowWidth / aspectRatio
     };
+
 }
+
+
 
 function draw() {
     background(240);
@@ -80,4 +114,6 @@ function draw() {
 
     leftRope.stiffness = ((Matter.Constraint.currentLength(leftRope) > leftRope.length) ?  1 : 0.00001);
     rightRope.stiffness = ((Matter.Constraint.currentLength(rightRope) > rightRope.length) ?  1 : 0.00001);
+
+    sign.step();
 }

@@ -16,3 +16,12 @@ function draw_constraint(cons) {
 
     line(ax, ay, bx, by);
 }
+
+function pxToNorm(pixel, length) {
+    return pixel/length;
+
+}
+
+function normToPx(normalized, length) {
+    return normalized*length;
+}
