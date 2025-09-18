@@ -10,9 +10,9 @@ const aspectRatio = BASE_W/BASE_H;
 let scaleFactor = 1
 
 let pointLA = {x:0.4, y:0},
-    pointLB = {x:-0.9, y:0.9},
+    pointLB = {x:-0.9, y:-0.9},
     pointRA = {x:0.6, y:0},
-    pointRB = {x:0.9, y:0.9},
+    pointRB = {x:0.9, y:-0.9},
     lengthL = 0.4,
     lengthR = 0.4
 
@@ -82,8 +82,27 @@ function setup() {
     World.add(world, mConstraint);
 }
 
+function cleanup () {
+    if (mConstraint) {
+        World.remove(world, mConstraint);
+        Matter.Mouse.clearSourceEvents(mConstraint.mouse);
+        mConstraint = null;
+    }
+    if (leftRope)  { World.remove(world, leftRope);  leftRope = null; }
+    if (rightRope) { World.remove(world, rightRope); rightRope = null; }
+    if (sign?.body){ World.remove(world, sign.body); }
+
+    //Composite.clear(world, false, true);
+    //Engine.clear(engine);
+
+    engine = null;
+    world = null;
+    if (canvas) canvas.remove();
+}
+
 function windowResized() {
-    setup()
+    cleanup();
+    setup();
 }
 
 function updateCanvasDimensions() {
@@ -100,7 +119,6 @@ function updateCanvasDimensions() {
     };
 
 }
-
 
 
 function draw() {

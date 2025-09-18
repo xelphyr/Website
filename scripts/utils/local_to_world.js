@@ -1,11 +1,8 @@
 function local_to_world(point, body) {
-    let pos = body.position,
-        rot = body.angle;
-
+    let pos = body.position;
     let { x, y } = point;
-    let c = Math.cos(rot), s = Math.sin(rot);
-    let finalX = pos.x + x*c - y*s,
-        finalY = pos.y + x*s + y*c;
+    let finalX = pos.x + x,
+        finalY = pos.y + y;
 
     return {x: finalX, y: finalY};
 }
