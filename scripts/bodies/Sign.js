@@ -1,11 +1,14 @@
-class SignMain {
+class Sign {
 
-    constructor() {
-        this.positionBackup = {x: 0.4, y:0};
-        this.sizeBackup = {x: 0.25, y:0.067};
+    constructor(position, size, text) {
+        //this.positionBackup = {x: 0.4, y:0};
+        //this.sizeBackup = {x: 0.25, y:0.067};
+        this.positionBackup = position;
+        this.sizeBackup = size;
         this.angle = 0;
         this.body = null;
         this.canvasCache = null;
+        this.text = text
     }
 
 
