@@ -68,6 +68,10 @@ class Rope {
             By += bodyBPos.y;
         }
 
+        push();
+        stroke("#130200")
+        strokeWeight(5)
         line(Ax, Ay, Bx, By);
+        pop();
     }
 }
