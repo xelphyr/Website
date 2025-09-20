@@ -14,6 +14,10 @@ function draw_constraint(cons) {
     line(ax, ay, bx, by);
 }
 
+function stiffness_lerp(curr, max) {
+    return min(exp(10*(curr-max)), 1);
+}
+
 function pxToNorm(pixel, length) {
     return pixel/length;
 

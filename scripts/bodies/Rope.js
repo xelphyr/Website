@@ -42,7 +42,7 @@ class Rope {
     }
 
     step = () => {
-        this.constraint.stiffness = ((Matter.Constraint.currentLength(this.constraint) > this.constraint.length) ?  1 : 0.00001);
+        this.constraint.stiffness = (stiffness_lerp(Matter.Constraint.currentLength(this.constraint), this.constraint.length));
     }
 
     show = () => {
