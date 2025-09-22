@@ -18,6 +18,10 @@ function stiffness_lerp(curr, max) {
     return min(exp(10*(curr-max)), 1);
 }
 
+function open_link(link) {
+    window.open(link)
+}
+
 function pxToNorm(pixel, length) {
     return pixel/length;
 
@@ -26,3 +30,8 @@ function pxToNorm(pixel, length) {
 function normToPx(normalized, length) {
     return normalized*length;
 }
+
+function getHoveredButtons() {
+    return Query.point([subsign1.body, subsign2.body], {x: mouseX, y: mouseY});
+}
+

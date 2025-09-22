@@ -1,6 +1,6 @@
 class Sign {
 
-    constructor(position, size, text) {
+    constructor(position, size, text, link) {
         //this.positionBackup = {x: 0.4, y:0};
         //this.sizeBackup = {x: 0.25, y:0.067};
         this.positionBackup = position;
@@ -12,6 +12,7 @@ class Sign {
         this._maxCooldown = 0.1;
         this._cooldown = 0.1;
         this._enabled = true;
+        this.link = link;
     }
 
 
@@ -51,12 +52,11 @@ class Sign {
         World.add(world, this.body);
     }
 
-
-
-    show = () => {
+    show = (button) => {
         let pos = this.body.position;
         let rot = this.body.angle;
-        let signColor = (this._enabled) ? color(0, 255, 255) : color(40);
+        let signColor = (this._enabled) ? ((button?.id === this.body.id) ? color(220) : color(0, 255, 255)) : color(40);
+
 
         push();
         rectMode(CENTER);

@@ -1,7 +1,7 @@
 // Matter.js aliases
-const { Engine, World, Bodies, Body, Constraint, Mouse, MouseConstraint} = Matter;
+const { Engine, World, Bodies, Body, Constraint, Mouse, MouseConstraint, Query} = Matter;
 
-let engine, runner, world, btn, canvas, mConstraint;
+let engine, runner, world, canvas, mConstraint;
 let sign, subsign1, subsign2;
 let leftRope1, rightRope1, leftRope2, rightRope2, leftRope3, rightRope3;
 
@@ -32,7 +32,7 @@ function setup() {
 
     if (!alreadyLoaded) {
         sign = new Sign({x: 0.4, y:0.1}, {x: 0.25, y:0.067}, "Xelphyr");
-        subsign1 = new Sign({x: 0.42, y:0}, {x: 0.2, y:0.055}, "About Me");
+        subsign1 = new Sign({x: 0.42, y:0}, {x: 0.2, y:0.055}, "About Me", "https://garden.xelphyr.xyz/");
         subsign2 = new Sign({x: 0.42, y:-0.1}, {x: 0.2, y:0.055}, "Projects");
         sign.resizeUpdate(canvasWidth, canvasHeight);
         subsign1.resizeUpdate(canvasWidth, canvasHeight);
@@ -141,6 +141,9 @@ function draw() {
     background(2);
     Engine.update(engine);
 
+    let buttons = getHoveredButtons();
+    let button = buttons[0]??null;
+
     // draw body
     leftRope1.show();
     rightRope1.show();
@@ -148,9 +151,9 @@ function draw() {
     rightRope2.show();
     leftRope3.show();
     rightRope3.show();
-    sign.show();
-    subsign1.show();
-    subsign2.show();
+    sign.show(button);
+    subsign1.show(button);
+    subsign2.show(button);
 
     leftRope1.step();
     rightRope1.step();
@@ -161,4 +164,16 @@ function draw() {
     sign.step();
     subsign1.step();
     subsign2.step();
+}
+
+function doubleClicked() {
+    let button = getHoveredButtons()[0] ?? null;
+
+    if (button){
+        if (button.id === subsign1.body.id) {
+            window.open_link(subsign1.link);
+        } else if (button.id === subsign2.body.id) {
+            window.open_link(subsign2.link)
+        }
+    }
 }
